@@ -7,8 +7,8 @@ package gotz
 import (
 	"encoding/json"
 	"errors"
-	"time"
 	"io"
+	"time"
 )
 
 func init() {
