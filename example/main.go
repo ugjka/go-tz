@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/ugjka/gotz"
+	"github.com/ugjka/go-tz"
 )
 
 func main() {
