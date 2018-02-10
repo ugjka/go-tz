@@ -15,7 +15,7 @@ import (
 
 const (
 	// IGNORE polygons with points less than this
-	IGNORE = 50
+	IGNORE = 100
 )
 
 func main() {
@@ -113,10 +113,10 @@ func simplify(v [][]float64) (out [][]float64) {
 	}
 	for i := 0.0005; ; i = i + 0.0005 {
 		slice := simplifier.Simplify(v, i, true)
-		fmt.Printf("%d, ", len(slice))
-
-		if len(slice) < int(math.Sqrt(float64(len(v)))*4) {
-			fmt.Printf("\n")
+		if len(slice) < int(math.Sqrt(float64(len(v)*2))*4)+IGNORE {
+			if len(slice) < 20 {
+				fmt.Printf("%d, ", len(slice))
+			}
 			return slice
 		}
 	}
