@@ -19,4 +19,6 @@ lookup timezone for a given location
 Pacific/Kiritimati
 ```
 
+Uses simplified shapefile from https://github.com/evansiroky/timezone-boundary-builder/
+
 looking for someone who can do better job at simplifying the geojson file
