@@ -113,7 +113,7 @@ func simplify(v [][]float64) (out [][]float64) {
 	}
 	for i := 0.0005; ; i = i + 0.0005 {
 		slice := simplifier.Simplify(v, i, true)
-		if len(slice) < int(math.Sqrt(float64(len(v)*2))*4)+IGNORE {
+		if len(slice) < int(math.Sqrt(float64(len(v)*2))*3)+IGNORE {
 			if len(slice) < 20 {
 				fmt.Printf("%d, ", len(slice))
 			}
