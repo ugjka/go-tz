@@ -7,6 +7,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 
 	"github.com/yrsh/simplify-go"
@@ -14,9 +15,7 @@ import (
 
 const (
 	// IGNORE polygons with points less than this
-	IGNORE = 100
-	// MAX points in polygons after simplification
-	MAX = 250
+	IGNORE = 50
 )
 
 func main() {
@@ -116,7 +115,7 @@ func simplify(v [][]float64) (out [][]float64) {
 		slice := simplifier.Simplify(v, i, true)
 		fmt.Printf("%d, ", len(slice))
 
-		if len(slice) < MAX {
+		if len(slice) < int(math.Sqrt(float64(len(v)))*4) {
 			fmt.Printf("\n")
 			return slice
 		}
