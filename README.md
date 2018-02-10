@@ -18,3 +18,5 @@ lookup timezone for a given location
   [ugjka@archee example]$ go run main.go 
 Pacific/Kiritimati
 ```
+
+looking for someone who can do better job at simplifying the geojson file
