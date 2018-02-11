@@ -1,8 +1,8 @@
 # go-tz
 tz-lookup (wip)
 
-[![GoDoc](https://godoc.org/github.com/ugjka/cleverbot-go?status.svg)](https://godoc.org/github.com/ugjka/go-tz)
-[![Go Report Card](https://goreportcard.com/badge/github.com/ugjka/go-tz)](https://goreportcard.com/report/github.com/ugjka/cleverbot-go)
+[![GoDoc](https://godoc.org/github.com/ugjka/go-tz?status.svg)](https://godoc.org/github.com/ugjka/go-tz)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ugjka/go-tz)](https://goreportcard.com/report/github.com/ugjka/go-tz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
