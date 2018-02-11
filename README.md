@@ -26,4 +26,4 @@ Pacific/Kiritimati
 
 Uses simplified shapefile from https://github.com/evansiroky/timezone-boundary-builder/
 
-GeoJson Simplification done with http://mapshaper.org/
+GeoJson Simplification done with http://mapshaper.org/ and https://github.com/foursquare/shapefile-geo
