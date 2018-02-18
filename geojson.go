@@ -2,7 +2,11 @@ package gotz
 
 import (
 	"encoding/json"
+	"errors"
 )
+
+//ErrNoTZID when no TZID found for region
+var ErrNoTZID = errors.New("gotz: tzid not found")
 
 // FeatureCollection ...
 type FeatureCollection struct {
@@ -36,8 +40,14 @@ type geometry struct {
 	Coordinates [][][][]float64 `json:"coordinates,omitempty"`
 }
 
-func (f *Feature) getZone() string {
-	return f.Properties["tzid"]
+func (f *Feature) getZone() (string, error) {
+	if v, ok := f.Properties["TZID"]; ok {
+		return v, nil
+	}
+	if v, ok := f.Properties["tzid"]; ok {
+		return v, nil
+	}
+	return "", ErrNoTZID
 }
 
 func (g *Geometry) pointInZone(pt []float64) bool {

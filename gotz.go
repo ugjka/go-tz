@@ -26,7 +26,7 @@ var tzdata FeatureCollection
 // Point is a location
 type Point struct {
 	Lat float64
-	Lng float64
+	Lon float64
 }
 
 // ErrNoZoneFound when Zone for given point is not found in shapefile
@@ -34,9 +34,14 @@ var ErrNoZoneFound = errors.New("gotz: No corresponding zone found in shapefile"
 
 // GetZone gets time.Location
 func GetZone(p Point) (loc *time.Location, err error) {
+	var tzid string
 	for _, v := range tzdata.Features {
-		if v.Geometry.pointInZone([]float64{p.Lng, p.Lat}) {
-			return time.LoadLocation(v.getZone())
+		if v.Geometry.pointInZone([]float64{p.Lon, p.Lat}) {
+			tzid, err = v.getZone()
+			if err != nil {
+				return loc, err
+			}
+			return time.LoadLocation(tzid)
 		}
 	}
 	return nil, ErrNoZoneFound
