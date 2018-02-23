@@ -1,4 +1,5 @@
 # go-tz
+
 tz-lookup by lng and lat
 
 [![GoDoc](https://godoc.org/github.com/ugjka/go-tz?status.svg)](https://godoc.org/github.com/ugjka/go-tz)
@@ -11,7 +12,7 @@ lookup timezone for a given location
 ```go
 // Loading Zone for Line Islands, Kiritimati
 	zone, err := gotz.GetZone(gotz.Point{
-		Lat: 1.74294, Lng: -157.21328,
+		Lat: 1.74294, Lon: -157.21328,
 	})
 	if err != nil {
 		panic(err)
