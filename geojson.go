@@ -6,7 +6,7 @@ import (
 )
 
 //ErrNoTZID when no TZID found for region
-var ErrNoTZID = errors.New("gotz: tzid not found")
+var ErrNoTZID = errors.New("tzid for feature not found")
 
 // FeatureCollection ...
 type FeatureCollection struct {

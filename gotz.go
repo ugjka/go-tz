@@ -30,7 +30,7 @@ type Point struct {
 }
 
 // ErrNoZoneFound when Zone for given point is not found in shapefile
-var ErrNoZoneFound = errors.New("gotz: No corresponding zone found in shapefile")
+var ErrNoZoneFound = errors.New("no corresponding zone found in shapefile")
 
 // GetZone gets time.Location
 func GetZone(p Point) (loc *time.Location, err error) {
