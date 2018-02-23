@@ -36,11 +36,11 @@ var ErrNoZoneFound = errors.New("gotz: No corresponding zone found in shapefile"
 func GetZone(p Point) (loc *time.Location, err error) {
 	var tzid string
 	for _, v := range tzdata.Features {
+		if _, err := v.getZone(); err != nil {
+			continue
+		}
 		if v.Geometry.pointInZone([]float64{p.Lon, p.Lat}) {
-			tzid, err = v.getZone()
-			if err != nil {
-				return loc, err
-			}
+			tzid, _ = v.getZone()
 			return time.LoadLocation(tzid)
 		}
 	}
