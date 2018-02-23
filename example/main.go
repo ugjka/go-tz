@@ -23,7 +23,7 @@ func main() {
 
 	// Loading Zone for Line Islands, Kiritimati
 	zone, err := gotz.GetZone(gotz.Point{
-		Lat: 1.74294, Lng: -157.21328,
+		Lat: 1.74294, Lon: -157.21328,
 	})
 	if err != nil {
 		panic(err)
