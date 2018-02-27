@@ -50,15 +50,6 @@ func (f *Feature) getZone() (string, error) {
 	return "", ErrNoTZID
 }
 
-func (g *Geometry) pointInZone(pt []float64) bool {
-	for _, poly := range g.Coordinates {
-		if polygon(poly).Contains(pt) {
-			return true
-		}
-	}
-	return false
-}
-
 // UnmarshalJSON for polygons and multipolygons
 func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 	var polyType struct {

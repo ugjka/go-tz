@@ -39,9 +39,11 @@ func GetZone(p Point) (loc *time.Location, err error) {
 		if _, err := v.getZone(); err != nil {
 			continue
 		}
-		if v.Geometry.pointInZone([]float64{p.Lon, p.Lat}) {
-			tzid, _ = v.getZone()
-			return time.LoadLocation(tzid)
+		for _, poly := range v.Geometry.Coordinates {
+			if polygon(poly).Contains([]float64{p.Lon, p.Lat}) {
+				tzid, _ = v.getZone()
+				return time.LoadLocation(tzid)
+			}
 		}
 	}
 	return nil, ErrNoZoneFound
