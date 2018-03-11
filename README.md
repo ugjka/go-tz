@@ -24,6 +24,6 @@ fmt.Println(zone)
 Pacific/Kiritimati
 ```
 
-Uses simplified shapefile from [](https://github.com/evansiroky/timezone-boundary-builder/)
+Uses simplified shapefile from [timezone-boundary-builder](https://github.com/evansiroky/timezone-boundary-builder/)
 
 GeoJson Simplification done with [mapshaper](http://mapshaper.org/) and [shapefile-geo](https://github.com/foursquare/shapefile-geo)
