@@ -56,7 +56,7 @@ func (p polygon) Contains(point point) bool {
 // Using the raycast algorithm, this returns whether or not the passed in point
 // Intersects with the edge drawn by the passed in start and end points.
 // Original implementation: http://rosettacode.org/wiki/Ray-casting_algorithm#Go
-func (p polygon) intersectsWithRaycast(point point, start point, end point) bool {
+func (p polygon) intersectsWithRaycast(point, start, end point) bool {
 	// Always ensure that the the first point
 	// has a y coordinate that is less than the second point
 	if start.lng() > end.lng() {
