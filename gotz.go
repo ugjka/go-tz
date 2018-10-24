@@ -101,5 +101,10 @@ func buildCenterCache() {
 // LoadGeoJSON loads custom GeoJSON shapefile
 func LoadGeoJSON(r io.Reader) error {
 	tzdata = FeatureCollection{}
-	return json.NewDecoder(r).Decode(&tzdata)
+	err := json.NewDecoder(r).Decode(&tzdata)
+	if err != nil {
+		return err
+	}
+	buildCenterCache()
+	return nil
 }
