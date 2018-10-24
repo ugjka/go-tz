@@ -21,6 +21,17 @@ func (p point) lng() float64 {
 	return p[0]
 }
 
+func (p polygon) Centroid() []float64 {
+	x := 0.0
+	y := 0.0
+	numPoints := float64(len(p[0]))
+	for _, p := range p[0] {
+		x += p[0]
+		y += p[1]
+	}
+	return []float64{x / numPoints, y / numPoints}
+}
+
 // Returns whether or not the polygon is closed.
 // TODO:  This can obviously be improved, but for now,
 //        this should be sufficient for detecting if points
