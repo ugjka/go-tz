@@ -14,7 +14,6 @@ type FeatureCollection struct {
 }
 
 type featureCollection struct {
-	Type     string     `json:"type"`
 	Features []*Feature `json:"features"`
 }
 
@@ -24,8 +23,6 @@ type Feature struct {
 }
 
 type feature struct {
-	Type       string            `json:"type"`
-	ID         string            `json:"id"`
 	Geometry   Geometry          `json:"geometry"`
 	Properties map[string]string `json:"properties"`
 }
