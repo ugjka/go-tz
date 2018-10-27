@@ -2,8 +2,8 @@ package gotz
 
 import "math"
 
-func bound(ps [][]float64) [][]float64 {
-	if len(ps) == 0 {
+func getBoundingBox(points [][]float64) [][]float64 {
+	if len(points) == 0 {
 		return [][]float64{{0, 0}, {0, 0}}
 	}
 
@@ -13,7 +13,7 @@ func bound(ps [][]float64) [][]float64 {
 	maxX := math.Inf(-1)
 	maxY := math.Inf(-1)
 
-	for _, v := range ps {
+	for _, v := range points {
 		minX = math.Min(minX, v[0])
 		minY = math.Min(minY, v[1])
 
@@ -27,13 +27,13 @@ func bound(ps [][]float64) [][]float64 {
 	}
 }
 
-func contains(b [][]float64, point []float64) bool {
+func inBoundingBox(box [][]float64, point []float64) bool {
 
-	if point[1] < b[0][1] || b[1][1] < point[1] {
+	if point[1] < box[0][1] || box[1][1] < point[1] {
 		return false
 	}
 
-	if point[0] < b[0][0] || b[1][0] < point[0] {
+	if point[0] < box[0][0] || box[1][0] < point[0] {
 		return false
 	}
 

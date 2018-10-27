@@ -41,18 +41,20 @@ var ErrNoZoneFound = errors.New("no corresponding zone found in shapefile")
 // GetZone gets time.Location
 func GetZone(p Point) (loc *time.Location, err error) {
 	var tzid string
-	for _, v := range tzdata.Features {
-		if tzid, err = v.getZone(); err != nil {
+	var v *Feature
+	polys := make([][][][]float64, 0)
+	for _, v = range tzdata.Features {
+		if tzid, err = v.getTZID(); err != nil {
 			continue
 		}
-		polys := v.Geometry.Coordinates
+		polys = v.Geometry.Coordinates
 		for i := 0; i < len(polys); i += 2 {
 			//Check bounding box first
 			//Massive speedup
-			if !contains(polys[i][0], []float64{p.Lon, p.Lat}) {
+			if !inBoundingBox(polys[i][0], []float64{p.Lon, p.Lat}) {
 				continue
 			}
-			if polygon(polys[i+1]).Contains([]float64{p.Lon, p.Lat}) {
+			if polygon(polys[i+1]).contains([]float64{p.Lon, p.Lat}) {
 				return time.LoadLocation(tzid)
 			}
 		}
@@ -67,12 +69,15 @@ func distanceFrom(p1, p2 []float64) float64 {
 }
 
 func getClosestZone(point Point) (loc *time.Location, err error) {
-	mindist := math.MaxFloat64
+	mindist := math.Inf(1)
 	var winner string
-	for tzid, v := range centerCache {
-		for _, p := range v {
-			tmp := distanceFrom(p, []float64{point.Lon, point.Lat})
-			tmp = math.Abs(tmp)
+	var tzid string
+	var tmp float64
+	v := make([][]float64, 0)
+	p := make([]float64, 0)
+	for tzid, v = range centerCache {
+		for _, p = range v {
+			tmp = distanceFrom(p, []float64{point.Lon, point.Lat})
 			if tmp < mindist {
 				mindist = tmp
 				winner = tzid
@@ -92,7 +97,7 @@ func buildCenterCache() {
 	var tzid string
 	var err error
 	for _, v := range tzdata.Features {
-		if tzid, err = v.getZone(); err != nil {
+		if tzid, err = v.getTZID(); err != nil {
 			continue
 		}
 		for i, poly := range v.Geometry.Coordinates {
@@ -100,10 +105,7 @@ func buildCenterCache() {
 			if i%2 == 0 {
 				continue
 			}
-			if _, ok := centerCache[tzid]; !ok {
-				centerCache[tzid] = make([][]float64, 0)
-			}
-			centerCache[tzid] = append(centerCache[tzid], polygon(poly).Centroid())
+			centerCache[tzid] = append(centerCache[tzid], polygon(poly).centroid())
 		}
 	}
 }

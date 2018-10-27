@@ -6,7 +6,7 @@ import (
 )
 
 //ErrNoTZID when no TZID found for region
-var ErrNoTZID = errors.New("tzid for feature not found")
+var errNoTZID = errors.New("tzid for feature not found")
 
 // FeatureCollection ...
 type FeatureCollection struct {
@@ -40,14 +40,14 @@ type geometry struct {
 	Coordinates [][][][]float64 `json:"coordinates,omitempty"`
 }
 
-func (f *Feature) getZone() (string, error) {
+func (f *Feature) getTZID() (string, error) {
 	if v, ok := f.Properties["TZID"]; ok {
 		return v, nil
 	}
 	if v, ok := f.Properties["tzid"]; ok {
 		return v, nil
 	}
-	return "", ErrNoTZID
+	return "", errNoTZID
 }
 
 // UnmarshalJSON for polygons and multipolygons
@@ -74,7 +74,7 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 		}
 		//Create a bounding box
 		b := make([][][]float64, 1)
-		b[0] = bound(polygon.Coordinates[0])
+		b[0] = getBoundingBox(polygon.Coordinates[0])
 		g.Coordinates = append(g.Coordinates, b)
 		g.Coordinates = append(g.Coordinates, polygon.Coordinates)
 		return nil
@@ -87,7 +87,7 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 		for _, poly := range multiPolygon.Coordinates {
 			//Create a bounding box
 			b := make([][][]float64, 1)
-			b[0] = bound(poly[0])
+			b[0] = getBoundingBox(poly[0])
 			g.Coordinates = append(g.Coordinates, b)
 			g.Coordinates = append(g.Coordinates, poly)
 		}

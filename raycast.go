@@ -9,19 +9,19 @@ func (p polygon) points() [][]float64 {
 	return p[0]
 }
 
-func newPoint(lat, lng float64) point {
-	return []float64{lng, lat}
+func newPoint(lon, lat float64) point {
+	return []float64{lon, lat}
+}
+
+func (p point) lon() float64 {
+	return p[0]
 }
 
 func (p point) lat() float64 {
 	return p[1]
 }
 
-func (p point) lng() float64 {
-	return p[0]
-}
-
-func (p polygon) Centroid() []float64 {
+func (p polygon) centroid() []float64 {
 	x := 0.0
 	y := 0.0
 	numPoints := float64(len(p[0]))
@@ -36,7 +36,7 @@ func (p polygon) Centroid() []float64 {
 // TODO:  This can obviously be improved, but for now,
 //        this should be sufficient for detecting if points
 //        are contained using the raycast algorithm.
-func (p polygon) IsClosed() bool {
+func (p polygon) isClosed() bool {
 	if len(p.points()) < 3 {
 		return false
 	}
@@ -45,8 +45,8 @@ func (p polygon) IsClosed() bool {
 }
 
 // Returns whether or not the current Polygon contains the passed in Point.
-func (p polygon) Contains(point point) bool {
-	if !p.IsClosed() {
+func (p polygon) contains(point point) bool {
+	if !p.isClosed() {
 		return false
 	}
 
@@ -70,7 +70,7 @@ func (p polygon) Contains(point point) bool {
 func (p polygon) intersectsWithRaycast(point, start, end point) bool {
 	// Always ensure that the the first point
 	// has a y coordinate that is less than the second point
-	if start.lng() > end.lng() {
+	if start.lon() > end.lon() {
 
 		// Switch the points if otherwise.
 		start, end = end, start
@@ -80,13 +80,13 @@ func (p polygon) intersectsWithRaycast(point, start, end point) bool {
 	// Move the point's y coordinate
 	// outside of the bounds of the testing region
 	// so we can start drawing a ray
-	for point.lng() == start.lng() || point.lng() == end.lng() {
-		newLng := math.Nextafter(point.lng(), math.Inf(1))
-		point = newPoint(point.lat(), newLng)
+	for point.lon() == start.lon() || point.lon() == end.lon() {
+		newLon := math.Nextafter(point.lon(), math.Inf(1))
+		point = newPoint(newLon, point.lat())
 	}
 
 	// If we are outside of the polygon, indicate so.
-	if point.lng() < start.lng() || point.lng() > end.lng() {
+	if point.lon() < start.lon() || point.lon() > end.lon() {
 		return false
 	}
 
@@ -107,8 +107,8 @@ func (p polygon) intersectsWithRaycast(point, start, end point) bool {
 		}
 	}
 
-	raySlope := (point.lng() - start.lng()) / (point.lat() - start.lat())
-	diagSlope := (end.lng() - start.lng()) / (end.lat() - start.lat())
+	raySlope := (point.lon() - start.lon()) / (point.lat() - start.lat())
+	diagSlope := (end.lon() - start.lon()) / (end.lat() - start.lat())
 
 	return raySlope >= diagSlope
 }
