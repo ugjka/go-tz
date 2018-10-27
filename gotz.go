@@ -41,13 +41,11 @@ var ErrNoZoneFound = errors.New("no corresponding zone found in shapefile")
 // GetZone gets time.Location
 func GetZone(p Point) (loc *time.Location, err error) {
 	var tzid string
-	var v *Feature
-	polys := make([][][][]float64, 0)
-	for _, v = range tzdata.Features {
+	for _, v := range tzdata.Features {
 		if tzid, err = v.getTZID(); err != nil {
 			continue
 		}
-		polys = v.Geometry.Coordinates
+		polys := v.Geometry.Coordinates
 		for i := 0; i < len(polys); i += 2 {
 			//Check bounding box first
 			//Massive speedup
@@ -71,13 +69,9 @@ func distanceFrom(p1, p2 []float64) float64 {
 func getClosestZone(point Point) (loc *time.Location, err error) {
 	mindist := math.Inf(1)
 	var winner string
-	var tzid string
-	var tmp float64
-	v := make([][]float64, 0)
-	p := make([]float64, 0)
-	for tzid, v = range centerCache {
-		for _, p = range v {
-			tmp = distanceFrom(p, []float64{point.Lon, point.Lat})
+	for tzid, v := range centerCache {
+		for _, p := range v {
+			tmp := distanceFrom(p, []float64{point.Lon, point.Lat})
 			if tmp < mindist {
 				mindist = tmp
 				winner = tzid
