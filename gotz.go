@@ -45,8 +45,14 @@ func GetZone(p Point) (loc *time.Location, err error) {
 		if tzid, err = v.getZone(); err != nil {
 			continue
 		}
-		for _, poly := range v.Geometry.Coordinates {
-			if polygon(poly).Contains([]float64{p.Lon, p.Lat}) {
+		polys := v.Geometry.Coordinates
+		for i := 0; i < len(polys); i += 2 {
+			//Check bounding box first
+			//Massive speedup
+			if !contains(polys[i][0], []float64{p.Lon, p.Lat}) {
+				continue
+			}
+			if polygon(polys[i+1]).Contains([]float64{p.Lon, p.Lat}) {
 				return time.LoadLocation(tzid)
 			}
 		}
@@ -89,7 +95,11 @@ func buildCenterCache() {
 		if tzid, err = v.getZone(); err != nil {
 			continue
 		}
-		for _, poly := range v.Geometry.Coordinates {
+		for i, poly := range v.Geometry.Coordinates {
+			// ignore bounding boxes
+			if i%2 == 0 {
+				continue
+			}
 			if _, ok := centerCache[tzid]; !ok {
 				centerCache[tzid] = make([][]float64, 0)
 			}
