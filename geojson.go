@@ -72,6 +72,10 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 		if err := json.Unmarshal(data, &polygon); err != nil {
 			return err
 		}
+		//Create a bounding box
+		b := make([][][]float64, 1)
+		b[0] = bound(polygon.Coordinates[0])
+		g.Coordinates = append(g.Coordinates, b)
 		g.Coordinates = append(g.Coordinates, polygon.Coordinates)
 		return nil
 	}
@@ -80,7 +84,13 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 		if err := json.Unmarshal(data, &multiPolygon); err != nil {
 			return err
 		}
-		g.Coordinates = multiPolygon.Coordinates
+		for _, poly := range multiPolygon.Coordinates {
+			//Create a bounding box
+			b := make([][][]float64, 1)
+			b[0] = bound(poly[0])
+			g.Coordinates = append(g.Coordinates, b)
+			g.Coordinates = append(g.Coordinates, poly)
+		}
 		return nil
 	}
 	return nil
