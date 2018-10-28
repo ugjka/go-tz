@@ -28,7 +28,7 @@ import (
 )
 
 func init() {
-	data, err := Asset("reduced/reduced.json")
+	data, err := getAsset("reduced/reduced.json")
 	if err != nil {
 		panic(err)
 	}
