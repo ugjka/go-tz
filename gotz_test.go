@@ -49,3 +49,16 @@ func TestGetZone(t *testing.T) {
 	}
 	fmt.Println("Not found", time.Now().Sub(start))
 }
+
+func ExampleGetZone() {
+	// Loading Zone for Line Islands, Kiritimati
+	p := Point{
+		Lat: 1.74294, Lon: -157.21328,
+	}
+	zone, err := GetZone(p)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(zone[0])
+	// Output: Pacific/Kiritimati
+}

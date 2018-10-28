@@ -1,6 +1,22 @@
-// Package gotz for timezone lookup for given location
-// Timezone shapefile is embedded in the build binary using go-bindata
-// You can load your own geojson shapefile if you want
+// Timezone lookup for a given location
+//
+// Features
+//
+// * The timezone shapefile is embedded in the build binary using go-bindata
+//
+// * Supports overlapping zones
+//
+// * You can load your own geojson shapefile if you want
+//
+// * Sub millisecond lookup even on old hardware
+//
+// Problems
+//
+// * The shapefile is simplified using a lossy method so it may be innacurate along the borders
+//
+// * This is purerly in-memory. Uses ~100MB of ram
+//
+// * Nautical timezones are not included for practical reasons
 //
 package gotz
 
@@ -28,16 +44,16 @@ type centers map[string][][]float64
 
 var centerCache centers
 
-// Point is a location
+// Point describes a location by Latitude and Longitude
 type Point struct {
 	Lat float64
 	Lon float64
 }
 
-// ErrNoZoneFound when Zone for given point is not found in shapefile
+// ErrNoZoneFound is returned when a zone for the given point is not found in the shapefile
 var ErrNoZoneFound = errors.New("no corresponding zone found in shapefile")
 
-// GetZone gets time.Location
+// GetZone returns a slice of strings containing time zone id's for a given Point
 func GetZone(p Point) (tzid []string, err error) {
 	var id string
 	for _, v := range tzdata.Features {
@@ -106,7 +122,7 @@ func buildCenterCache() {
 	}
 }
 
-// LoadGeoJSON loads custom GeoJSON shapefile
+// LoadGeoJSON loads a custom GeoJSON shapefile from a Reader
 func LoadGeoJSON(r io.Reader) error {
 	tzdata = FeatureCollection{}
 	err := json.NewDecoder(r).Decode(&tzdata)

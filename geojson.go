@@ -5,10 +5,8 @@ import (
 	"errors"
 )
 
-//ErrNoTZID when no TZID found for region
 var errNoTZID = errors.New("tzid for feature not found")
 
-// FeatureCollection ...
 type FeatureCollection struct {
 	featureCollection
 }
@@ -17,7 +15,6 @@ type featureCollection struct {
 	Features []*Feature `json:"features"`
 }
 
-// Feature ...
 type Feature struct {
 	feature
 }
@@ -27,7 +24,6 @@ type feature struct {
 	Properties map[string]string `json:"properties"`
 }
 
-// Geometry ...
 type Geometry struct {
 	geometry
 }
@@ -47,7 +43,6 @@ func (f *Feature) getTZID() (string, error) {
 	return "", errNoTZID
 }
 
-// UnmarshalJSON for polygons and multipolygons
 func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 	var polyType struct {
 		Type       string      `json:"type"`
