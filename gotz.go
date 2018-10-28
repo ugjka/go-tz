@@ -9,7 +9,6 @@ import (
 	"errors"
 	"io"
 	"math"
-	"time"
 )
 
 func init() {
@@ -39,10 +38,10 @@ type Point struct {
 var ErrNoZoneFound = errors.New("no corresponding zone found in shapefile")
 
 // GetZone gets time.Location
-func GetZone(p Point) (loc *time.Location, err error) {
-	var tzid string
+func GetZone(p Point) (tzid []string, err error) {
+	var id string
 	for _, v := range tzdata.Features {
-		if tzid, err = v.getTZID(); err != nil {
+		if id, err = v.getTZID(); err != nil {
 			continue
 		}
 		polys := v.Geometry.Coordinates
@@ -53,9 +52,12 @@ func GetZone(p Point) (loc *time.Location, err error) {
 				continue
 			}
 			if polygon(polys[i+1]).contains([]float64{p.Lon, p.Lat}) {
-				return time.LoadLocation(tzid)
+				tzid = append(tzid, id)
 			}
 		}
+	}
+	if len(tzid) > 0 {
+		return tzid, nil
 	}
 	return getClosestZone(p)
 }
@@ -66,23 +68,23 @@ func distanceFrom(p1, p2 []float64) float64 {
 	return math.Sqrt(d0*d0 + d1*d1)
 }
 
-func getClosestZone(point Point) (loc *time.Location, err error) {
+func getClosestZone(point Point) (tzid []string, err error) {
 	mindist := math.Inf(1)
 	var winner string
-	for tzid, v := range centerCache {
+	for id, v := range centerCache {
 		for _, p := range v {
 			tmp := distanceFrom(p, []float64{point.Lon, point.Lat})
 			if tmp < mindist {
 				mindist = tmp
-				winner = tzid
+				winner = id
 			}
 		}
 	}
 	// Limit search radius
 	if mindist > 2.0 {
-		return nil, ErrNoZoneFound
+		return tzid, ErrNoZoneFound
 	}
-	return time.LoadLocation(winner)
+	return append(tzid, winner), nil
 }
 
 //BuildCenterCache builds centers for polygons

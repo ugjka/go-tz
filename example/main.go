@@ -28,5 +28,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(zone)
+	fmt.Println(zone[0])
 }

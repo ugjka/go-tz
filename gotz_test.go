@@ -14,8 +14,8 @@ func TestGetZone(t *testing.T) {
 	if err != nil {
 		t.Error("Could not find Europe/Riga")
 	}
-	if zone.String() != "Europe/Riga" {
-		t.Error("Zone not Europe/Riga but", zone.String())
+	if zone[0] != "Europe/Riga" {
+		t.Error("Zone not Europe/Riga but", zone[0])
 	}
 	fmt.Println(zone, time.Now().Sub(start))
 	//Test Tokyo
@@ -25,8 +25,8 @@ func TestGetZone(t *testing.T) {
 	if err != nil {
 		t.Error("Could not find Asia/Tokyo")
 	}
-	if zone.String() != "Asia/Tokyo" {
-		t.Error("Zone not Asia/Tokyo but", zone.String())
+	if zone[0] != "Asia/Tokyo" {
+		t.Error("Zone not Asia/Tokyo but", zone[0])
 	}
 	fmt.Println(zone, time.Now().Sub(start))
 	//Tuvalu testing center cache
@@ -36,8 +36,8 @@ func TestGetZone(t *testing.T) {
 	if err != nil {
 		t.Error("Could not find Pacific/Funafuti")
 	}
-	if zone.String() != "Pacific/Funafuti" {
-		t.Error("Zone not Pacific/Funafuti but", zone.String())
+	if zone[0] != "Pacific/Funafuti" {
+		t.Error("Zone not Pacific/Funafuti but", zone[0])
 	}
 	fmt.Println(zone, time.Now().Sub(start))
 	//Baker Island AoE. Should error out

@@ -17,7 +17,7 @@ zone, err := gotz.GetZone(gotz.Point{
 if err != nil {
     panic(err)
 }
-fmt.Println(zone)
+fmt.Println(zone[0])
 ```
 
 ```bash
