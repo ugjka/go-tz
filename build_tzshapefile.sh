@@ -7,7 +7,7 @@ wget "https://github.com/evansiroky/timezone-boundary-builder/releases/download/
 unzip "${file}"
 
 mkdir "reduced"
-mapshaper -i dist/combined.json -simplify visvalingam 20% -clean -o reduced/reduced.json
+mapshaper -i dist/combined.json -simplify visvalingam 20% -o reduced/reduced.json
 
 git clone "https://github.com/ugjka/go-bindata.git"
 go build -o builder go-bindata/go-bindata/*.go
