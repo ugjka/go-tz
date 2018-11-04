@@ -29,11 +29,19 @@ func getBoundingBox(points [][]float64) [][]float64 {
 
 func inBoundingBox(box [][]float64, point []float64) bool {
 
-	if point[1] < box[0][1] || box[1][1] < point[1] {
+	if point[1] < box[0][1] {
 		return false
 	}
 
-	if point[0] < box[0][0] || box[1][0] < point[0] {
+	if box[1][1] < point[1] {
+		return false
+	}
+
+	if point[0] < box[0][0] {
+		return false
+	}
+
+	if box[1][0] < point[0] {
 		return false
 	}
 

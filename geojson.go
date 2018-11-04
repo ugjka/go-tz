@@ -20,8 +20,10 @@ type Feature struct {
 }
 
 type feature struct {
-	Geometry   Geometry          `json:"geometry"`
-	Properties map[string]string `json:"properties"`
+	Geometry   Geometry `json:"geometry"`
+	Properties struct {
+		Tzid string `json:"tzid"`
+	} `json:"properties"`
 }
 
 type Geometry struct {
@@ -31,16 +33,6 @@ type Geometry struct {
 type geometry struct {
 	Type        string          `json:"type"`
 	Coordinates [][][][]float64 `json:"coordinates,omitempty"`
-}
-
-func (f *Feature) getTZID() (string, error) {
-	if v, ok := f.Properties["TZID"]; ok {
-		return v, nil
-	}
-	if v, ok := f.Properties["tzid"]; ok {
-		return v, nil
-	}
-	return "", errNoTZID
 }
 
 func (g *Geometry) UnmarshalJSON(data []byte) (err error) {

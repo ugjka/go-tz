@@ -57,9 +57,10 @@ var ErrNoZoneFound = errors.New("no corresponding zone found in shapefile")
 func GetZone(p Point) (tzid []string, err error) {
 	var id string
 	for _, v := range tzdata.Features {
-		if id, err = v.getTZID(); err != nil {
+		if v.Properties.Tzid == "" {
 			continue
 		}
+		id = v.Properties.Tzid
 		polys := v.Geometry.Coordinates
 		for i := 0; i < len(polys); i += 2 {
 			//Check bounding box first
@@ -107,11 +108,11 @@ func getClosestZone(point Point) (tzid []string, err error) {
 func buildCenterCache() {
 	centerCache = make(centers)
 	var tzid string
-	var err error
 	for _, v := range tzdata.Features {
-		if tzid, err = v.getTZID(); err != nil {
+		if v.Properties.Tzid == "" {
 			continue
 		}
+		tzid = v.Properties.Tzid
 		for i, poly := range v.Geometry.Coordinates {
 			// ignore bounding boxes
 			if i%2 == 0 {
