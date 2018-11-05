@@ -31,8 +31,8 @@ type Geometry struct {
 }
 
 type geometry struct {
-	Type        string          `json:"type"`
-	Coordinates [][][][]float64 `json:"coordinates,omitempty"`
+	Type        string    `json:"type"`
+	Coordinates [][]Point `json:"coordinates,omitempty"`
 }
 
 func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
@@ -57,10 +57,13 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 			return err
 		}
 		//Create a bounding box
-		b := make([][][]float64, 1)
-		b[0] = getBoundingBox(polygon.Coordinates[0])
+		pol := make([]Point, 0)
+		for _, v := range polygon.Coordinates[0] {
+			pol = append(pol, Point{v[0], v[1]})
+		}
+		b := getBoundingBox(pol)
 		g.Coordinates = append(g.Coordinates, b)
-		g.Coordinates = append(g.Coordinates, polygon.Coordinates)
+		g.Coordinates = append(g.Coordinates, pol)
 		return nil
 	}
 
@@ -69,11 +72,13 @@ func (g *Geometry) UnmarshalJSON(data []byte) (err error) {
 			return err
 		}
 		for _, poly := range multiPolygon.Coordinates {
-			//Create a bounding box
-			b := make([][][]float64, 1)
-			b[0] = getBoundingBox(poly[0])
+			pol := make([]Point, 0)
+			for _, v := range poly[0] {
+				pol = append(pol, Point{v[0], v[1]})
+			}
+			b := getBoundingBox(pol)
 			g.Coordinates = append(g.Coordinates, b)
-			g.Coordinates = append(g.Coordinates, poly)
+			g.Coordinates = append(g.Coordinates, pol)
 		}
 		return nil
 	}

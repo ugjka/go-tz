@@ -2,9 +2,9 @@ package gotz
 
 import "math"
 
-func getBoundingBox(points [][]float64) [][]float64 {
+func getBoundingBox(points []Point) []Point {
 	if len(points) == 0 {
-		return [][]float64{{0, 0}, {0, 0}}
+		return []Point{{0, 0}, {0, 0}}
 	}
 
 	minX := math.Inf(1)
@@ -14,34 +14,34 @@ func getBoundingBox(points [][]float64) [][]float64 {
 	maxY := math.Inf(-1)
 
 	for _, v := range points {
-		minX = math.Min(minX, v[0])
-		minY = math.Min(minY, v[1])
+		minX = math.Min(minX, v.Lon)
+		minY = math.Min(minY, v.Lat)
 
-		maxX = math.Max(maxX, v[0])
-		maxY = math.Max(maxY, v[1])
+		maxX = math.Max(maxX, v.Lon)
+		maxY = math.Max(maxY, v.Lat)
 	}
 
-	return [][]float64{
+	return []Point{
 		{math.Min(minX, maxX), math.Min(minY, maxY)},
 		{math.Max(minX, maxX), math.Max(minY, maxY)},
 	}
 }
 
-func inBoundingBox(box [][]float64, point []float64) bool {
+func inBoundingBox(box []Point, point Point) bool {
 
-	if point[1] < box[0][1] {
+	if point.Lat < box[0].Lat {
 		return false
 	}
 
-	if box[1][1] < point[1] {
+	if box[1].Lat < point.Lat {
 		return false
 	}
 
-	if point[0] < box[0][0] {
+	if point.Lon < box[0].Lon {
 		return false
 	}
 
-	if box[1][0] < point[0] {
+	if box[1].Lon < point.Lon {
 		return false
 	}
 

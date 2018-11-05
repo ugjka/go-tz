@@ -40,14 +40,14 @@ func init() {
 
 var tzdata FeatureCollection
 
-type centers map[string][][]float64
+type centers map[string][]Point
 
 var centerCache centers
 
 // Point describes a location by Latitude and Longitude
 type Point struct {
-	Lat float64
 	Lon float64
+	Lat float64
 }
 
 // ErrNoZoneFound is returned when a zone for the given point is not found in the shapefile
@@ -65,10 +65,10 @@ func GetZone(p Point) (tzid []string, err error) {
 		for i := 0; i < len(polys); i += 2 {
 			//Check bounding box first
 			//Massive speedup
-			if !inBoundingBox(polys[i][0], []float64{p.Lon, p.Lat}) {
+			if !inBoundingBox(polys[i], p) {
 				continue
 			}
-			if polygon(polys[i+1]).contains([]float64{p.Lon, p.Lat}) {
+			if polygon(polys[i+1]).contains(p) {
 				tzid = append(tzid, id)
 			}
 		}
@@ -79,9 +79,9 @@ func GetZone(p Point) (tzid []string, err error) {
 	return getClosestZone(p)
 }
 
-func distanceFrom(p1, p2 []float64) float64 {
-	d0 := (p1[0] - p2[0])
-	d1 := (p1[1] - p2[1])
+func distanceFrom(p1, p2 Point) float64 {
+	d0 := (p1.Lon - p2.Lon)
+	d1 := (p1.Lat - p2.Lat)
 	return math.Sqrt(d0*d0 + d1*d1)
 }
 
@@ -90,7 +90,7 @@ func getClosestZone(point Point) (tzid []string, err error) {
 	var winner string
 	for id, v := range centerCache {
 		for _, p := range v {
-			tmp := distanceFrom(p, []float64{point.Lon, point.Lat})
+			tmp := distanceFrom(p, point)
 			if tmp < mindist {
 				mindist = tmp
 				winner = id
