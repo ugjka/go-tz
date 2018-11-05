@@ -25,6 +25,7 @@ import (
 	"errors"
 	"io"
 	"math"
+	"runtime/debug"
 )
 
 func init() {
@@ -36,6 +37,7 @@ func init() {
 		panic(err)
 	}
 	buildCenterCache()
+	debug.FreeOSMemory()
 }
 
 var tzdata FeatureCollection
