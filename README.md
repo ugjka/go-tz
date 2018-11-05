@@ -34,7 +34,7 @@ GeoJson Simplification done with [mapshaper](http://mapshaper.org/)
 * The timezone shapefile is embedded in the build binary using go-bindata
 * Supports overlapping zones
 * You can load your own geojson shapefile if you want
-* Sub millisecond lookup even on old hardware 
+* Sub millisecond lookup even on old hardware
 
 ## Problems
 
