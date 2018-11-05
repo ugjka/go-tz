@@ -3,6 +3,10 @@ package gotz
 import "math"
 
 type polygon [][][]float64
+
+//TODO
+//Convert point to struct
+//pprof
 type point []float64
 
 func (p polygon) points() [][]float64 {
@@ -80,13 +84,23 @@ func (p polygon) intersectsWithRaycast(point, start, end point) bool {
 	// Move the point's y coordinate
 	// outside of the bounds of the testing region
 	// so we can start drawing a ray
-	for point.lon() == start.lon() || point.lon() == end.lon() {
+	for {
+		if point.lon() != start.lon() {
+			break
+		}
+		if point.lon() != end.lon() {
+			break
+		}
 		newLon := math.Nextafter(point.lon(), math.Inf(1))
 		point = newPoint(newLon, point.lat())
 	}
 
 	// If we are outside of the polygon, indicate so.
-	if point.lon() < start.lon() || point.lon() > end.lon() {
+	if point.lon() < start.lon() {
+		return false
+	}
+
+	if point.lon() > end.lon() {
 		return false
 	}
 
