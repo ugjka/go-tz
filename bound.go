@@ -27,7 +27,7 @@ func getBoundingBox(points []Point) []Point {
 	}
 }
 
-func inBoundingBox(box []Point, point Point) bool {
+func inBoundingBox(box []Point, point *Point) bool {
 
 	if point.Lat < box[0].Lat {
 		return false

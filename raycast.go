@@ -4,8 +4,8 @@ import "math"
 
 type polygon []Point
 
-func newPoint(lon, lat float64) Point {
-	return Point{lon, lat}
+func newPoint(lon, lat *float64) *Point {
+	return &Point{*lon, *lat}
 }
 
 func (p polygon) centroid() Point {
@@ -32,7 +32,7 @@ func (p polygon) isClosed() bool {
 }
 
 // Returns whether or not the current Polygon contains the passed in Point.
-func (p polygon) contains(point Point) bool {
+func (p polygon) contains(point *Point) bool {
 	if !p.isClosed() {
 		return false
 	}
@@ -40,10 +40,10 @@ func (p polygon) contains(point Point) bool {
 	start := len(p) - 1
 	end := 0
 
-	contains := p.intersectsWithRaycast(point, p[start], p[end])
+	contains := p.intersectsWithRaycast(point, &p[start], &p[end])
 
 	for i := 1; i < len(p); i++ {
-		if p.intersectsWithRaycast(point, p[i-1], p[i]) {
+		if p.intersectsWithRaycast(point, &p[i-1], &p[i]) {
 			contains = !contains
 		}
 	}
@@ -54,7 +54,7 @@ func (p polygon) contains(point Point) bool {
 // Using the raycast algorithm, this returns whether or not the passed in point
 // Intersects with the edge drawn by the passed in start and end points.
 // Original implementation: http://rosettacode.org/wiki/Ray-casting_algorithm#Go
-func (p polygon) intersectsWithRaycast(point, start, end Point) bool {
+func (p polygon) intersectsWithRaycast(point, start, end *Point) bool {
 	// Always ensure that the the first point
 	// has a y coordinate that is less than the second point
 	if start.Lon > end.Lon {
@@ -75,7 +75,7 @@ func (p polygon) intersectsWithRaycast(point, start, end Point) bool {
 			break
 		}
 		newLon := math.Nextafter(point.Lon, math.Inf(1))
-		point = newPoint(newLon, point.Lat)
+		point = newPoint(&newLon, &point.Lat)
 	}
 
 	// If we are outside of the polygon, indicate so.

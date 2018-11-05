@@ -65,10 +65,10 @@ func GetZone(p Point) (tzid []string, err error) {
 		for i := 0; i < len(polys); i += 2 {
 			//Check bounding box first
 			//Massive speedup
-			if !inBoundingBox(polys[i], p) {
+			if !inBoundingBox(polys[i], &p) {
 				continue
 			}
-			if polygon(polys[i+1]).contains(p) {
+			if polygon(polys[i+1]).contains(&p) {
 				tzid = append(tzid, id)
 			}
 		}
@@ -76,21 +76,21 @@ func GetZone(p Point) (tzid []string, err error) {
 	if len(tzid) > 0 {
 		return tzid, nil
 	}
-	return getClosestZone(p)
+	return getClosestZone(&p)
 }
 
-func distanceFrom(p1, p2 Point) float64 {
+func distanceFrom(p1, p2 *Point) float64 {
 	d0 := (p1.Lon - p2.Lon)
 	d1 := (p1.Lat - p2.Lat)
 	return math.Sqrt(d0*d0 + d1*d1)
 }
 
-func getClosestZone(point Point) (tzid []string, err error) {
+func getClosestZone(point *Point) (tzid []string, err error) {
 	mindist := math.Inf(1)
 	var winner string
 	for id, v := range centerCache {
 		for _, p := range v {
-			tmp := distanceFrom(p, point)
+			tmp := distanceFrom(&p, point)
 			if tmp < mindist {
 				mindist = tmp
 				winner = id
