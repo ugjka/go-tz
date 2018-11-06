@@ -14,7 +14,7 @@
 //
 // * The shapefile is simplified using a lossy method so it may be innacurate along the borders
 //
-// * This is purerly in-memory. Uses ~100MB of ram
+// * This is purerly in-memory. Uses ~32MB of ram
 //
 // * Nautical timezones are not included for practical reasons
 //

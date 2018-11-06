@@ -17,7 +17,7 @@ func TestGetZone(t *testing.T) {
 	if len(zone) != 0 && zone[0] != "Europe/Riga" {
 		t.Error("Zone not Europe/Riga but", zone[0])
 	}
-	fmt.Println(zone, time.Now().Sub(start))
+	fmt.Println(zone, time.Since(start))
 	//Test Tokyo
 	p = Point{139.7594549, 35.6828387}
 	start = time.Now()
@@ -28,7 +28,7 @@ func TestGetZone(t *testing.T) {
 	if len(zone) != 0 && zone[0] != "Asia/Tokyo" {
 		t.Error("Zone not Asia/Tokyo but", zone[0])
 	}
-	fmt.Println(zone, time.Now().Sub(start))
+	fmt.Println(zone, time.Since(start))
 	//Tuvalu testing center cache
 	p = Point{178.1167698, -7.768959}
 	start = time.Now()
@@ -39,7 +39,7 @@ func TestGetZone(t *testing.T) {
 	if len(zone) != 0 && zone[0] != "Pacific/Funafuti" {
 		t.Error("Zone not Pacific/Funafuti but", zone[0])
 	}
-	fmt.Println(zone, time.Now().Sub(start))
+	fmt.Println(zone, time.Since(start))
 	//Baker Island AoE. Should error out
 	p = Point{-176.474331436, 0.190165906}
 	start = time.Now()
@@ -47,7 +47,7 @@ func TestGetZone(t *testing.T) {
 	if err == nil {
 		t.Error("Baker island didn't error")
 	}
-	fmt.Println("Not found", time.Now().Sub(start))
+	fmt.Println("Not found", time.Since(start))
 }
 
 func ExampleGetZone() {
