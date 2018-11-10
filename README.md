@@ -6,6 +6,7 @@ tz-lookup by lon and lat
 [![Go Report Card](https://goreportcard.com/badge/github.com/ugjka/go-tz)](https://goreportcard.com/report/github.com/ugjka/go-tz)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Donate](https://dl.ugjka.net/Donate-PayPal-green.svg)](https://www.paypal.me/ugjka)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz?ref=badge_shield)
 
 lookup timezone for a given location
 
@@ -41,3 +42,7 @@ GeoJson Simplification done with [mapshaper](http://mapshaper.org/)
 * Shapefile is simplified using a lossy method so it may be innacurate along the borders
 * This is purerly in-memory. Uses ~32MB of ram
 * Nautical timezones are not included for practical reasons
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fugjka%2Fgo-tz?ref=badge_large)
