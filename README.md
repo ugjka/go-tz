@@ -9,7 +9,7 @@ tz-lookup by Lon and Lat
 ## Usage
 
 ```go
-import "gopkg.in/ugjka/go-tz.v2/tz"
+import "gopkg.in/ugjka/go-tz.v2"
 ```
 
 ### Example
