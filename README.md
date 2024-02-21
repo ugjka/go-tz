@@ -5,7 +5,7 @@ Time zone lookup by Lon and Lat
 ## Usage
 
 ```go
-import "github.com/ugjka/go-tz"
+import "github.com/ugjka/go-tz/v2"
 ```
 
 ### Example
