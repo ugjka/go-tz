@@ -1,5 +1,7 @@
 # go-tz
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/ugjka/go-tz/v2.svg)](https://pkg.go.dev/github.com/ugjka/go-tz/v2)
+
 Time zone lookup by Lon and Lat
 
 ## Usage
