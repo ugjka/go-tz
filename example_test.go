@@ -3,7 +3,7 @@ package tz_test
 import (
 	"fmt"
 
-	"gopkg.in/ugjka/go-tz.v2"
+	"github.com/ugjka/go-tz"
 )
 
 func ExampleGetZone() {

@@ -1,15 +1,11 @@
 # go-tz
 
-## Library revived as of 2024
-
-# Heads up: versions before 2024 did not handle holes in maps
-
-tz-lookup by Lon and Lat
+Time zone lookup by Lon and Lat
 
 ## Usage
 
 ```go
-import "gopkg.in/ugjka/go-tz.v2"
+import "github.com/ugjka/go-tz"
 ```
 
 ### Example
