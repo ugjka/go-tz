@@ -30,7 +30,7 @@ func main() {
 		log.Fatalln("Error: mapshaper executable not found in $PATH")
 	}
 
-	release := flag.String("release", "2018g", "timezone boundary builder release version")
+	release := flag.String("release", "", "timezone boundary builder release version")
 	flag.Parse()
 
 	resp, err := http.Get(fmt.Sprintf(dlURL, *release))
@@ -129,7 +129,7 @@ func main() {
 	}
 	fmt.Println("*** MAPSHAPER FINISHED ***")
 
-	fmt.Println("*** GENERATING GO CODE ***")
+	fmt.Println("*** CREATING COMPRESSED SHAPEFILE ***")
 	reducedFile, err := os.Open("reduced.json")
 	if err != nil {
 		log.Printf("Error: could not open file: %v\n", err)
