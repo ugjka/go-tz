@@ -27,26 +27,35 @@ import (
 	"io"
 	"math"
 	"runtime/debug"
+	"sync"
 )
 
-func init() {
-	load()
+// loadOnce loads the embedded shapefile on first use rather than at package initialization, so a
+// program that imports the package but never looks up a zone does not pay for decoding it.
+var loadOnce sync.Once
+
+// ensureLoaded loads the embedded shapefile unless it, or a custom one, has already been loaded.
+func ensureLoaded() {
+	loadOnce.Do(load)
 }
 
 //go:embed shapefile.gz
 var tzShapeFile []byte
 
+// load decodes the embedded shapefile. The embedded bytes are kept, since they live in the binary and
+// LoadGeoJSON falls back to them when a custom shapefile cannot be decoded.
 func load() {
-	g, err := gzip.NewReader(bytes.NewBuffer(tzShapeFile))
+	g, err := gzip.NewReader(bytes.NewReader(tzShapeFile))
 	if err != nil {
 		panic(err)
 	}
 	defer g.Close()
 
-	if err := json.NewDecoder(g).Decode(&tzdata); err != nil {
+	var data FeatureCollection
+	if err := json.NewDecoder(g).Decode(&data); err != nil {
 		panic(err)
 	}
-	tzShapeFile = nil
+	tzdata = data
 	buildCenterCache()
 	debug.FreeOSMemory()
 }
@@ -74,6 +83,7 @@ func GetZone(p Point) (tzid []string, err error) {
 	if p.Lon > 180 || p.Lon < -180 || p.Lat > 90 || p.Lat < -90 {
 		return nil, ErrOutOfRange
 	}
+	ensureLoaded()
 	var id string
 	for _, v := range tzdata.Features {
 		if v.Properties.Tzid == "" {
@@ -158,8 +168,11 @@ func buildCenterCache() {
 	}
 }
 
-// LoadGeoJSON loads a custom GeoJSON shapefile from a Reader
+// LoadGeoJSON loads a custom GeoJSON shapefile from a Reader, falling back to the embedded one if it
+// cannot be decoded.
 func LoadGeoJSON(r io.Reader) error {
+	// Marks the data as loaded, so a later lookup does not replace the custom shapefile.
+	loadOnce.Do(func() {})
 	tzdata = FeatureCollection{}
 	err := json.NewDecoder(r).Decode(&tzdata)
 	if err != nil {
