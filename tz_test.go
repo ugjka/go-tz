@@ -2,9 +2,23 @@ package tz
 
 import (
 	"fmt"
+	"os"
 	"reflect"
+	"strings"
+	"sync"
 	"testing"
 )
+
+// TestMain fails if the shapefile was decoded before the first lookup, which package initialization
+// must not do.
+func TestMain(m *testing.M) {
+	if len(tzdata.Features) != 0 {
+		fmt.Println("shapefile loaded at package initialization")
+		os.Exit(1)
+	}
+
+	os.Exit(m.Run())
+}
 
 type result struct {
 	zones []string
@@ -177,5 +191,52 @@ func TestOutOfRange(t *testing.T) {
 				t.Errorf("expected error %v got %v", tc.err, err)
 			}
 		})
+	}
+}
+
+// TestGetZoneConcurrentFirstUse looks up zones from many goroutines at once, so the race detector
+// sees the shapefile being loaded on first use.
+func TestGetZoneConcurrentFirstUse(t *testing.T) {
+	var wg sync.WaitGroup
+
+	errs := make(chan string, 16)
+
+	for i := 0; i < 16; i++ {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+
+			zones, err := GetZone(Point{24.105078, 56.946285})
+
+			if err != nil || len(zones) != 1 || zones[0] != "Europe/Riga" {
+				errs <- fmt.Sprintf("got %v, %v", zones, err)
+			}
+		}()
+	}
+
+	wg.Wait()
+	close(errs)
+
+	for e := range errs {
+		t.Error(e)
+	}
+}
+
+// TestLoadGeoJSONInvalidFallsBack checks that a shapefile that cannot be decoded, loaded after the
+// embedded one, restores the embedded data rather than panicking.
+func TestLoadGeoJSONInvalidFallsBack(t *testing.T) {
+	if _, err := GetZone(Point{24.105078, 56.946285}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := LoadGeoJSON(strings.NewReader("{not json")); err == nil {
+		t.Fatal("expected a decode error")
+	}
+
+	zones, err := GetZone(Point{139.7594549, 35.6828387})
+
+	if err != nil || len(zones) != 1 || zones[0] != "Asia/Tokyo" {
+		t.Fatalf("got %v, %v", zones, err)
 	}
 }
